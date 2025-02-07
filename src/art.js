@@ -70,13 +70,26 @@ export class ArtSystem extends System {
 		const picture = this.world.createEntity();
 
 		const loader = new GLTFLoader();
+		const textureLoader = new TextureLoader();
+
 		loader.load(
 		'./assets/example.glb', // Replace with your model file path
 		(gltf) => {
 			const model = gltf.scene;
-			// model.scale.set(0.2, 0.2, 0.2); // Scale the model if necessary
+
+			const texture = textureLoader.load('./assets/bw_brick.jpg');
+			// texture.encoding = sRGBEncoding; // Ensure proper color
+
+			model.traverse((child) => {
+				if (child.isMesh) {
+					child.material.map = texture;
+					child.material.needsUpdate = true; // Ensure the update is applied
+				}
+			});
+
+			model.scale.set(0.05, 0.05, 0.05); // Scale the model if necessary
 			model.position.copy(position);
-			model.position.z += 1;
+			// model.position.z += 1;
 			scene.add(model);
 		},
 		undefined,
@@ -86,7 +99,7 @@ export class ArtSystem extends System {
 		}
 		);
 		
-		let text = true;
+		let text = false;
 		if (text) {
 
 			const obj = new Object3D();
