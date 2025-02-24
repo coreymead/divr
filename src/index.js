@@ -16,6 +16,7 @@ import { Clock } from 'three';
 import { PlayerSystem } from './player';
 import { PointerSystem } from './pointer';
 import { PurgeSystem } from './purge';
+import { RadialMenuSystem } from './radialmenu';
 import { SettingsSystem } from './settings';
 import { StudSystem } from './stud';
 import { TapeSystem } from './tape';
@@ -46,7 +47,8 @@ world
 	.registerSystem(PurgeSystem)
 	.registerSystem(MeasurementSystem)
 	.registerSystem(StudSystem)
-	.registerSystem(ArtSystem);
+	.registerSystem(ArtSystem)
+	.registerSystem(RadialMenuSystem);
 
 const { renderer } = globals;
 renderer.xr.setFramebufferScaleFactor(2);

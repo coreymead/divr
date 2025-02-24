@@ -73,21 +73,32 @@ export class ArtSystem extends System {
 		const textureLoader = new TextureLoader();
 
 		loader.load(
-		'./assets/example.glb', // Replace with your model file path
+		'./assets/coffee.glb', // Replace with your model file path
 		(gltf) => {
 			const model = gltf.scene;
 
-			const texture = textureLoader.load('./assets/bw_brick.jpg');
+			const texture = textureLoader.load('./assets/stripes.jpg');
 			// texture.encoding = sRGBEncoding; // Ensure proper color
 
 			model.traverse((child) => {
 				if (child.isMesh) {
-					child.material.map = texture;
+					// child.material.color = 0xffffff;
+					child.material.alphaMap = texture;
+					child.material.alphaTest = .5
+					child.material.transparent = true;
+					// child.material.opacity = 0.5;
+					// child.material.colorWrite = false;
+					// child.material.onBeforeCompile = (shader) => {
+					// 	shader.fragmentShader = shader.fragmentShader.replace(
+					// 		'diffuseColor.a = texture2D(alphaMap, vUv).g;',
+					// 		'diffuseColor.a = 1.0 - texture2D(alphaMap, vUv).g;' // Invert the alpha map (grayscale channel)
+					// 	);
+					// };
 					child.material.needsUpdate = true; // Ensure the update is applied
 				}
 			});
 
-			model.scale.set(0.05, 0.05, 0.05); // Scale the model if necessary
+			model.scale.set(1.1, 1.1, 1.1); // Scale the model if necessary
 			model.position.copy(position);
 			// model.position.z += 1;
 			scene.add(model);
