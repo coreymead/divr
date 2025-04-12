@@ -20,6 +20,7 @@ import { RadialMenuSystem } from './radialmenu';
 import { SettingsSystem } from './settings';
 import { StudSystem } from './stud';
 import { TapeSystem } from './tape';
+import { WallSystem } from './wall';
 import { World } from 'elics';
 import { globals } from './global';
 import { setupScene } from './scene';
@@ -48,7 +49,8 @@ world
 	.registerSystem(MeasurementSystem)
 	.registerSystem(StudSystem)
 	.registerSystem(ArtSystem)
-	.registerSystem(RadialMenuSystem);
+	.registerSystem(RadialMenuSystem)
+	.registerSystem(WallSystem);
 
 const { renderer } = globals;
 renderer.xr.setFramebufferScaleFactor(2);

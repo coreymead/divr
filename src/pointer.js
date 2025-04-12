@@ -27,7 +27,11 @@ export class PointerSystem extends System {
 			if (!controller) return;
 			if (valueStore.get('mode') !== controller.userData.mode) {
 				controller.userData.pointer = null;
-				controller.raySpace.remove(controller.pointerSpace)
+				controller.raySpace.remove(controller.pointerSpace);
+				if (controller.userData.lineGroup) {
+					scene.remove(controller.userData.lineGroup);
+					controller.userData.lineGroup = null;
+				}
 			}
 			if (!controller.userData.pointer) {
 				controller.pointerSpace = new Group();
@@ -37,16 +41,42 @@ export class PointerSystem extends System {
 					-0.06522086887323097,
 					0.10447758896833176,
 				);
-				let pointer = new Mesh(
-					new SphereGeometry(0.004),
-					new MeshBasicMaterial({ transparent: true, opacity: 0.6 }),
-				);
+				let pointer;
 				if (valueStore.get('mode') === 'Stud') {
+					// Create a new group that will be independent of controller orientation
+					const lineGroup = new Group();
+					scene.add(lineGroup);
+					
+					// Create the line mesh
 					pointer = new Mesh(LINE_GEOMETRY, new MeshBasicMaterial({ transparent: true, opacity: 0.6 }));
+					lineGroup.add(pointer);
+					
+					// Store both the line and its container group
+					controller.userData.pointer = pointer;
+					controller.userData.lineGroup = lineGroup;
+				} else {
+					pointer = new Mesh(
+						new SphereGeometry(0.004),
+						new MeshBasicMaterial({ transparent: true, opacity: 0.6 }),
+					);
+					controller.pointerSpace.add(pointer);
+					controller.userData.pointer = pointer;
 				}
-				controller.pointerSpace.add(pointer);
 				controller.userData.mode = valueStore.get('mode')
-				controller.userData.pointer = pointer;
+			}
+
+			// Update the line position and orientation in the update loop
+			if (valueStore.get('mode') === 'Stud' && controller.userData.pointer) {
+				// Get the controller's world position
+				const worldPos = new Vector3();
+				controller.pointerSpace.getWorldPosition(worldPos);
+				
+				// Update the line group's position to match the controller
+				controller.userData.lineGroup.position.copy(worldPos);
+				
+				// Keep the line vertical
+				controller.userData.lineGroup.rotation.set(0, 0, 0);
+				controller.userData.lineGroup.up.set(0, 1, 0);
 			}
 		});
 

@@ -22,7 +22,7 @@ import { globals } from './global';
 
 const SETTING_ENTRIES = {
 	unit: { position: [0, 0.01, 0.001], options: ['Imperial', 'Metric'] },
-	mode: { position: [0, -0.1775, 0.001], options: ['Tape', 'Stud', 'Art', 'Clamp'] },
+	mode: { position: [0, -0.1775, 0.001], options: ['Tape', 'Stud', 'Art', 'Clamp', 'Wall'] },
 	tips: { position: [0, -0.365, 0.001], options: ['On', 'Off'] },
 };
 
